@@ -42,6 +42,7 @@ bool sentMen = false;
 bool wasKilled[32];
 // TEMP VARIABLE
 bool tmp = false;
+bool canCancel = false;
 
 // INTEGERS VARIABLES
 // NEEDS SOME CLEANING HERE TOO
@@ -138,7 +139,7 @@ void debug_func()
 		// DISPLAY FOR 3SEC
 		debugV = false;
 		handlerInit = false;
-		setTextMsg(2, "The ~r~Red ~w~& ~b~Blue ~w~House~w~ v3.2");
+		setTextMsg(2, "The ~r~Red ~w~& ~b~Blue ~w~House~w~ v3.3");
 		// blip x : 125.6
 		// blip y : -1044.59
 		// blip z : 29.24
@@ -860,6 +861,10 @@ void setup_protect()
 	mission = true;
 	DWORD vehH, pedH, ennH, rumH;
 
+	// debug var
+	int debug_var = totalMission;
+
+
 	switch (rand() % 13){
 	case 0: rumH = GAMEPLAY::GET_HASH_KEY("gburrito2"); proStep = 4; break;
 	case 1: rumH = GAMEPLAY::GET_HASH_KEY("huntley"); proStep = 4; break;
@@ -876,7 +881,7 @@ void setup_protect()
 	case 12: rumH = GAMEPLAY::GET_HASH_KEY("manana"); proStep = 2; break;
 	}
 	vehHi = rumH;
-	int myRand = (rand() % 17) + 2;
+	int myRand = rand() % 15;
 	//int myRand = 0;
 	// TODO : ADD MORE PROTECTION MISSIONS
 	switch (myRand) {
@@ -968,7 +973,7 @@ void setup_protect()
 		ennHi = ennH;
 		mobProtect.x = 958;
 		mobProtect.y = 969;
-		mobProtect.z = 224;
+		mobProtect.z = 227;
 		break;
 	case 9:
 		vehH = GAMEPLAY::GET_HASH_KEY("ruiner");
@@ -1044,6 +1049,9 @@ void setup_protect()
 		WAIT(100);
 
 	scVeh[6] = VEHICLE::CREATE_VEHICLE(vehH, mobProtect.x, mobProtect.y, mobProtect.z, 180.0f, 0, true);
+	blips[4] = UI::ADD_BLIP_FOR_ENTITY(scVeh[6]);
+	UI::SET_BLIP_SPRITE(blips[4], 225);
+	UI::SET_BLIP_COLOUR(blips[4], 3);
 	scPed[6] = PED::CREATE_PED(26, pedH, mobProtect.x + 2.0f, mobProtect.y, mobProtect.z, 16, false, true);
 	scVeh[7] = VEHICLE::CREATE_VEHICLE(rumH, spawnPt1.x, spawnPt1.y, spawnPt1.z, 180.0f, 0, true);
 	scVeh[8] = VEHICLE::CREATE_VEHICLE(rumH, spawnPt2.x, spawnPt2.y, spawnPt2.z, 180.0f, 0, true);
@@ -1069,6 +1077,9 @@ void setup_protect()
 	// pimp it
 	pimpMyRide(0, 6);
 
+	//CANCEL
+	canCancel = true;
+
 }
 
 void setup_mobClean()
@@ -1084,6 +1095,9 @@ void setup_mobClean()
 	if (random == 1) mobClean2();
 	if (random == 2) mobClean3();
 	UI::SET_BLIP_ROUTE(blips[1], true);
+
+	//CANCEL
+	canCancel = true;
 
 
 }
@@ -1126,6 +1140,7 @@ void cleanupMissions(int type)
 	PED::SET_RELATIONSHIP_BETWEEN_GROUPS(255, GAMEPLAY::GET_HASH_KEY("player"), 0x90c7da60);
 	PED::SET_RELATIONSHIP_BETWEEN_GROUPS(255, 0x90c7da60, GAMEPLAY::GET_HASH_KEY("player"));
 	mission = false;
+	canCancel = false;
 	stopMusic();
 	AUDIO::RELEASE_MISSION_AUDIO_BANK();
 	AUDIO::RELEASE_SCRIPT_AUDIO_BANK();
@@ -1244,7 +1259,8 @@ void setup_Assassination(){
 	PED::SET_PED_SEEING_RANGE(scPed[6], 150.0f);
 
 
-
+	// CANCEL
+	canCancel = true;
 
 }
 
@@ -1538,8 +1554,7 @@ void setup_covertOps()
 
 }
 
-// UNUSED ANYMORE !!!
-/* 
+
 void menu(bool active, int type)
 {
 	if (active)
@@ -1558,103 +1573,8 @@ void menu(bool active, int type)
 			setTextMsg(1000, "Press Left or [L] for an Bison crew (~g~5 men~w~).~n~Price : ~g~$90,000");
 			setTextMsg(1000, "Press LS or [J] for an ~y~elite~w~ crew (~g~3 ~y~elite~g~ men~w~).~n~Price : ~g~$40,000");
 		}
-
-		if (type == 1)
-		{
-			selectedType = 1;
-			int payout = rand() % (50 - 20 + 1) + 20;
-			//contractPayout = payout * 1000;
-			setTextMsg(1000, "~r~Assassination contract~w~~n~Press Right or [E] to accept.");
-			std::string name1[] = { "Great ", "Heavy ", "Fast ", "Hyper ", "Wild ", "Surgical " };
-			std::string name2[] = { "Takedown", "Assassination", "Cleaning", "Burn", "Hunt", "Shot " };
-			std::string fname, dname;
-			fname = name1[rand() % 6] + name2[rand() % 6];
-			dname = "Name : " + fname + "~n~";
-			dname += "Objective : Kill the target.~n~";
-			dname += "Reward : ~g~";
-			dname += "$" + std::to_string(payout) + ",000";
-
-			setTextMsg(500, (char*)dname.c_str());
-		}
-
-		if (type == 2)
-		{
-			selectedType = 2;
-			int payout = rand() % (150 - 75 + 1) + 75;
-			//contractPayout = payout * 1000;
-			setTextMsg(1000, "~y~Mob cleaning contract~w~~n~Press Right or [E] to accept.");
-			std::string name1[] = { "Peter's ", "Simon's ", "Jack's ", "Johny's ", "Lucy's ", "Lester's " };
-			std::string name2[] = { "Cleaning", "Moping", "Mission", "Rain", "Manhunt", "Bigshot" };
-			std::string fname, dname;
-			fname = name1[rand() % 6] + name2[rand() % 6];
-			dname = "Name : " + fname + "~n~";
-			dname += "Objective : Clean the place.~n~";
-			dname += "Reward : ~g~";
-			dname += "$" + std::to_string(payout) + ",000";
-
-			setTextMsg(500, (char*)dname.c_str());
-		}
-
-		if (type == 3)
-		{
-			selectedType = 3;
-			int payout = rand() % (410 - 275 + 1) + 275;
-			//contractPayout = payout * 1000;
-			setTextMsg(1000, "~b~Protection contract~w~~n~Press Right or [E] to accept.");
-			std::string name1[] = { "Slow ", "Quick " };
-			std::string name2[] = { "Pain", "Nightmare" };
-			std::string fname, dname;
-			fname = name1[rand() % 2] + name2[rand() % 2];
-			dname = "Name : " + fname + "~n~";
-			dname += "Objective : Protect the guy.~n~";
-			dname += "Reward : ~g~";
-			dname += "$" + std::to_string(payout) + ",000";
-
-			setTextMsg(500, (char*)dname.c_str());
-			int riskB = rand() % (210 - 15 + 1) + 15;
-			dname = "~y~Risk bonus: ~g~$";
-			dname += std::to_string(riskB);
-			dname += ",000";
-			//contractPayout += riskB * 1000;
-			setTextMsg(500, (char*)dname.c_str());
-		}
-		if (type == 4)
-		{
-			selectedType = 4;
-			int payout = 0;
-			//contractPayout = payout * 1000;
-			setTextMsg(1000, "~p~Heist contract~w~~n~Press Right or [E] to accept.");
-			std::string dname;
-			dname = "Name : Big Score~n~";
-			dname += "Objective : Follow instructions.~n~";
-			dname += "Reward : ~g~Up to $5,000,000";
-
-			setTextMsg(500, (char*)dname.c_str());
-		}
-
-		if (type == 5)
-		{
-			selectedType = 5;
-			int payout = rand() % (275 - 150 + 1) + 150;
-			//contractPayout = payout * 1000;
-			setTextMsg(1000, "~m~Deal breaker contract~w~~n~Press Right or [E] to accept.");
-			std::string name1[] = { "NOOSE ", "Govt. ", "Feds ", "Enforcement " };
-			std::string name2[] = { "Takedown", "Attack", "Cleaning", "Assault" };
-			std::string fname, dname;
-			fname = name1[rand() % 4] + name2[rand() % 4];
-			dname = "Name : " + fname + "~n~";
-			dname += "Objective : Save the heroin.~n~";
-			dname += "Reward : ~g~";
-			dname += "$" + std::to_string(payout) + ",000";
-
-			setTextMsg(500, (char*)dname.c_str());
-		}
-
 	}
-	else {
-		setTextMsg(500, "Come back anytime if you want another contract!");
-	}
-} */
+}
 
 // HIRED PROTECTION.
 void setAssassinBackup()
@@ -3200,21 +3120,25 @@ void update()
 	if (ENTITY::IS_ENTITY_IN_WATER(playerPed)) isInAir = true;
 	if (PED::IS_PED_IN_ANY_BOAT(playerPed)) isInAir = true;
 
+	bodyguards_leave();
+	check();
+	recruit_checks();
+	debug_func();
+
 	if (!mission) {
 		redhouse_1();
 		redhouse_2();
 	}
 	else {
 		// SAVING ON IF STATEMENTS - IF IN MISSION THEN PRESSING O WILL CANCEL MISSION
-		if (GetAsyncKeyState('O') || CONTROLS::IS_CONTROL_JUST_PRESSED(0, 190) && CONTROLS::IS_CONTROL_JUST_PRESSED(0, 204)) cleanupMissions(1);
+		// PRESSING O ONLY WHEN POSSIBLE. 
+		// MADE SO THAT YOU CAN CANCEL REALLY QUICK WITHOUT IT LAGGING OUT.
+		if (canCancel) { if (GetAsyncKeyState('O') || CONTROLS::IS_CONTROL_JUST_PRESSED(0, 190) && CONTROLS::IS_CONTROL_JUST_PRESSED(0, 204)) { cleanupMissions(1); } }
 		// IS PLAYER DEAD?
 		basic_check();
 	}
 
-	bodyguards_leave();
-	check();
-	recruit_checks();
-	debug_func();
+	
 
 
 }
