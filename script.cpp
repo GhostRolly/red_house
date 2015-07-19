@@ -2151,10 +2151,12 @@ void redhouse_1()
 	// RED HOUSE 1 CHECKS
 	if (ENTITY::IS_ENTITY_AT_COORD(playerPed, 125.6, -1044.59, 29.3, 75.0f, 75.0f, 75.0f, 0, 1, 0) && !isAtRedHouse1) {
 		setupScene_main(true);
+		ENTITY::SET_ENTITY_AS_NO_LONGER_NEEDED(&payVeh);
 		isAtRedHouse1 = true;
 	}
 	if (!ENTITY::IS_ENTITY_AT_COORD(playerPed, 125.6, -1044.59, 29.3, 75.0f, 75.0f, 75.0f, 0, 1, 0) && isAtRedHouse1) {
 		setupScene_main(false);
+		ENTITY::SET_ENTITY_AS_NO_LONGER_NEEDED(&payVeh);
 		isAtRedHouse1 = false;
 	}
 
