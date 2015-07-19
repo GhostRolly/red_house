@@ -1,0 +1,21 @@
+﻿La génération a démarré 19/07/2015 17:02:32.
+     1>Projet "C:\Users\NGTX970\Documents\GitHub\red_house\NativeTrainer.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D NativeTrainer_EXPORTS /D _WINDLL /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"tmp\Release\\" /Fd"tmp\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp script.cpp
+         main.cpp
+         script.cpp
+     1>script.cpp(331): warning C4101: 'objects' : variable locale non référencée
+     1>script.cpp(1120): warning C4129: 'R' : caractère de séquence d'échappement non reconnu
+     1>script.cpp(1121): warning C4129: 'R' : caractère de séquence d'échappement non reconnu
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"bin\Release\the_red_house.asi" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"bin\Release\the_red_house.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\Release\the_red_house.lib" /MACHINE:X64 lib\ScriptHookV.lib /DLL tmp\Release\keyboard.obj
+         tmp\Release\main.obj
+         tmp\Release\script.obj
+         Génération de code en cours
+         Fin de la génération du code
+         NativeTrainer.vcxproj -> C:\Users\NGTX970\Documents\GitHub\red_house\bin\Release\the_red_house.asi
+     1>Génération du projet "C:\Users\NGTX970\Documents\GitHub\red_house\NativeTrainer.vcxproj" terminée (Build cible(s)).
+
+La génération a réussi.
+
+Temps écoulé 00:00:02.71
